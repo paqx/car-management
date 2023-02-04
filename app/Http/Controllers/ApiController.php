@@ -64,13 +64,18 @@ class ApiController extends Controller
 			->get();
 			
 		if ($reservations->isEmpty()) {
-			$slots = [$start_datetime, $end_datetime];
+			$response['response'] = 'There are no cars available within the selected timeframe.';
 			
-			return response()->json($slots);
+			return response()->json($response);
 		} else {
 			$slots = $this->getSlots($start_datetime, $end_datetime, $reservations);
 			
-			return response()->json($slots);
+			$response = [
+				'response' => ['slots' => $slots], 
+				'success' => true
+			];
+			
+			return response()->json($response);
 		}
 	}
 	
